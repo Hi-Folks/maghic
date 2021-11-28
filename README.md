@@ -1,5 +1,6 @@
-# MaGHic
-Maghic is a Swiss army knife tool for GitHub Actions Workflow.
+![Maghic](./maghic-cover.png)
+# Maghic
+Ma**gh**ic is a Swiss army knife tool for GitHub Actions Workflow.
 It provides:
 - a command line tool for managing, creating and autogenerate Yaml file Workflow for GitHub Actions;
 - a set of classes and methods for managing Yaml file (specific for GitHub Actions Workflows).
