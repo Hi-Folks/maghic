@@ -4,6 +4,7 @@ namespace App\Objects;
 
 use App\Traits\Workflow\Head;
 use App\Traits\Workflow\Job;
+use App\Traits\Workflow\ServiceMySql;
 use App\Traits\Workflow\Trigger;
 use Illuminate\Support\Arr;
 use Symfony\Component\Yaml\Yaml;
@@ -13,6 +14,7 @@ class YamlObject
     use Head;
     use Trigger;
     use Job;
+    use ServiceMySql;
 
     public function __construct(
         private mixed $yaml = []
