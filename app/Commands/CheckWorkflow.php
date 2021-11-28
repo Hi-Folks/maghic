@@ -39,6 +39,7 @@ class CheckWorkflow extends Command
 
 
         $this->title("Maghic: check file");
+        $this->line("Current Directory" . getcwd());
         $this->line("Workflow name: " . $yaml->getName());
         $this->line("PUSH Branches: " . $yaml->getOnPushBranchesString());
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
