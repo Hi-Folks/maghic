@@ -9,5 +9,6 @@ This is created for the GitHub Actions Hackathon: [2021 GitHub Actions Hackathon
 ## References
 
 ### Packages
-- Symfony Yaml : https://symfony.com/doc/current/components/yaml.html
+- [Laravel Zero](https://laravel-zero.com/): micro framework for console application; 
+- [Symfony Yaml](https://symfony.com/doc/current/components/yaml.html): a package for parsing Yaml structures.
 - 
