@@ -54,6 +54,10 @@ trait Job
     {
         return $this->setYamlKey($this->getCurrentJobKey("runs-on"), $operatingSystems);
     }
+    public function setRunsOnMatrix(): self
+    {
+        return $this->setYamlKey($this->getCurrentJobKey("runs-on"), '${{ matrix.os }}');
+    }
     public function getRunsOn(): array
     {
         return $this->getYamlKey($this->getCurrentJobKey("runs-on"));

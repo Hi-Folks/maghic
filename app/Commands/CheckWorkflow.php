@@ -47,8 +47,9 @@ class CheckWorkflow extends Command
         $yaml->setOnPushDefaultBranches();
 
         //$yaml->addJob();
-        $yaml->setRunsOn(["ubuntu-latest"]);
+        //$yaml->setRunsOn(["ubuntu-latest"]);
         $yaml->addMysqlService();
+        $yaml->addMatrixOsUbuntuLatest();
         $this->line($yaml->toString());
         //file_put_contents(__DIR__ . "/../../.github/workflows/test.yaml", $yaml->toString());
     }
