@@ -20,6 +20,15 @@ trait Job
         return $this->getYamlKey("jobs." . $this->currentJobName);
     }
 
+    public function getFirstJobName()
+    {
+        $jobsArray = $this->getYamlKey("jobs");
+        if (is_array($jobsArray)) {
+            return array_key_first($jobsArray);
+        }
+        return $this->currentJobName;
+    }
+
     public function addJob($jobName = "build")
     {
         $this->setYamlKey("jobs." . $jobName, []);

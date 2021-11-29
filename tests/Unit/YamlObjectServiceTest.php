@@ -10,3 +10,13 @@ test('GetSet Service Image', function () {
     expect($y->setImage("mysql:latest"));
     expect($y->getImage())->toBe("mysql:latest");
 });
+
+test('Add Mysql service', function () {
+    $y = \App\Objects\YamlObject::make()
+        ->setName("Test Mysql Service")
+        ->setOnPushDefaultBranches()
+        ->addMysqlService();
+    expect($y->getImage())->toBe("mysql:latest");
+
+});
+

@@ -30,7 +30,9 @@ class YamlObject
     public static function load($yamlFile)
     {
         $yaml = Yaml::parseFile($yamlFile, Yaml::PARSE_OBJECT);
-        return new self($yaml);
+        $yamlObject = new self($yaml);
+        $yamlObject->setCurrentJobName($yamlObject->getFirstJobName());
+        return $yamlObject;
     }
 
     public function toString(): string

@@ -45,8 +45,10 @@ class CheckWorkflow extends Command
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
         $yaml->setName("new name for workflow");
         $yaml->setOnPushDefaultBranches();
+
         //$yaml->addJob();
-        $yaml->setRunsOn();
+        $yaml->setRunsOn(["ubuntu-latest"]);
+        $yaml->addMysqlService();
         $this->line($yaml->toString());
         //file_put_contents(__DIR__ . "/../../.github/workflows/test.yaml", $yaml->toString());
     }
