@@ -33,7 +33,7 @@ class YamlObject
     {
         return $this->yaml;
     }
-    public function getYamlInJsonFormat()
+    public function getYamlStringFormat()
     {
         return json_encode($this->getYaml());
     }

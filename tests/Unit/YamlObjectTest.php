@@ -15,6 +15,7 @@ test('Yaml Object file 001', function () {
     expect($y->getOnPullrequest())->toBeNull();
     expect($y->getOn())->not()->toBeNull();
     expect($y->getOnString())->toBe("workflow_dispatch");
+    expect($y->toString())->toBeString();
 });
 test('Yaml Object file 002', function () {
     $y = \App\Objects\YamlObject::load(__DIR__ . "/../data/002.yaml");

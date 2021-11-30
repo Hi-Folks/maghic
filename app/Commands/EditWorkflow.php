@@ -37,15 +37,20 @@ class EditWorkflow extends Command
             $yaml = YamlObject::load($yamlFile);
         }
 
-        $name = $this->ask("What is the Workflow name?");
-        $yaml->setName($name);
-        $event = $this->anticipate('Which event?', ["push", "pullrequest"]);
-        if ($event === "push") {
-            $yaml->setOnPushDefaultBranches();
-        }
-        if ($event === "pull_request") {
-            $yaml->setOnPullrequestDefaultBranches();
-        }
+
+        $this->title("Maghic: check file");
+        $this->line("Current Directory" . getcwd());
+        $this->line("Workflow name: " . $yaml->getName());
+        $this->line("PUSH Branches: " . $yaml->getOnPushBranchesString());
+        $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
+        $yaml->setName("new name for workflow");
+        $yaml->setOnPushDefaultBranches();
+
+        //$yaml->addJob();
+        //$yaml->setRunsOn(["ubuntu-latest"]);
+        $yaml->addMysqlService();
+        $yaml->addMatrixOsUbuntuLatest();
+
         $this->line($yaml->toString());
     }
 

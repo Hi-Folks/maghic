@@ -1,0 +1,20 @@
+name: Not VALID
+onx:
+    workflow_dispatch:
+        inputs:
+            name:
+                description: 'Person to greet'
+                required: true
+                default: 'Mona the Octocat'
+            home:
+                description: 'location'
+                required: false
+                default: 'The Octoverse'
+
+jobaaa:
+    say_hello:
+        runs-onx: ubuntu-latest
+        steps:
+            - run: |
+                  echo "Hello ${{ github.event.inputs.name }}!"
+                  echo "- in ${{ github.event.inputs.home }}!"

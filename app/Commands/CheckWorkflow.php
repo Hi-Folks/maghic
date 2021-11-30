@@ -16,7 +16,8 @@ class CheckWorkflow extends Command
      * @var string
      */
     protected $signature = 'yaml:check
-    {yaml? : Yaml file}';
+    {yaml : Yaml file}
+    {--show : show the parsed yaml file}';
 
     /**
      * The description of the command.
@@ -33,40 +34,40 @@ class CheckWorkflow extends Command
     public function handle()
     {
         $yamlFile = $this->argument('yaml');
-        if (is_null($yamlFile)) {
-            $yaml = YamlObject::make();
-        } else {
-            $yaml = YamlObject::load($yamlFile);
-        }
+        $showYaml = $this->option('show');
+        $yaml = YamlObject::load($yamlFile);
 
 
         $this->title("Maghic: check file");
+        $this->line("Check file: " . $yamlFile);
         $this->line("Current Directory" . getcwd());
+        try {
+            $json = $yaml->getYamlStringFormat();
+            /*
+            if ($json === false) {
+                $this->error("Not valid yaml");
+                return self::FAILURE;
+            }
+            */
+            $seconds = 60 * 60 * 3 ; // 3 hours
+            $schema = Cache::remember('cache-schema-yaml', $seconds, function () {
+                return Schema::import('https://json.schemastore.org/github-workflow');
+                //return Schema::import(json_decode(file_get_contents(base_path("github-workflow.json"))));
+            });
+            $schema->in(json_decode($json));
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+            return self::FAILURE;
+        }
         $this->line("Workflow name: " . $yaml->getName());
         $this->line("PUSH Branches: " . $yaml->getOnPushBranchesString());
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
-        $yaml->setName("new name for workflow");
-        $yaml->setOnPushDefaultBranches();
 
-        //$yaml->addJob();
-        //$yaml->setRunsOn(["ubuntu-latest"]);
-        $yaml->addMysqlService();
-        $yaml->addMatrixOsUbuntuLatest();
-
-
-        try {
-            $json = $yaml->getYamlInJsonFormat();
-            $seconds = 60 * 60 * 3 ; // 3 hours
-            $cacheSchemaYaml = Cache::remember('cache-schema-yaml', $seconds, function () {
-                return json_decode(file_get_contents("https://json.schemastore.org/github-workflow"));
-            });
-            $schema = Schema::import($cacheSchemaYaml);
-            $schema->in($json);
-        } catch (\Exception $e) {
-            $this->error($e->getMessage());
-            return;
+        if ($showYaml) {
+            $this->line($yaml->toString());
         }
-        $this->line($yaml->toString());
+        return self::SUCCESS;
+
         //file_put_contents(__DIR__ . "/../../.github/workflows/test.yaml", $yaml->toString());
     }
 
