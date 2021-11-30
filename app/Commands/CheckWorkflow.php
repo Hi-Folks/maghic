@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use App\Objects\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Cache;
 use LaravelZero\Framework\Commands\Command;
 use Swaggest\JsonSchema\Schema;
 
@@ -55,8 +56,12 @@ class CheckWorkflow extends Command
 
         try {
             $json = $yaml->getYamlInJsonFormat();
-            $schema = Schema::import('https://json.schemastore.org/github-workflow');
-            $schema->in(json_decode($json));
+            $seconds = 60 * 60 * 3 ; // 3 hours
+            $cacheSchemaYaml = Cache::remember('cache-schema-yaml', $seconds, function () {
+                return json_decode(file_get_contents("https://json.schemastore.org/github-workflow"));
+            });
+            $schema = Schema::import($cacheSchemaYaml);
+            $schema->in($json);
         } catch (\Exception $e) {
             $this->error($e->getMessage());
             return;
