@@ -19,6 +19,7 @@
         "php": "^8.0",
         "laminas/laminas-text": "^2.8",
         "laravel-zero/framework": "^8.8",
+        "swaggest/json-schema": "^0.12.39",
         "symfony/yaml": "^5.3"
     },
     "require-dev": {
