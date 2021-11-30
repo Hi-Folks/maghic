@@ -5,6 +5,7 @@ namespace App\Commands;
 use App\Objects\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use App\Objects\StepObject;
 
 class EditWorkflow extends Command
 {
@@ -43,13 +44,16 @@ class EditWorkflow extends Command
         $this->line("Workflow name: " . $yaml->getName());
         $this->line("PUSH Branches: " . $yaml->getOnPushBranchesString());
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
-        $yaml->setName("new name for workflow");
-        $yaml->setOnPushDefaultBranches();
-
-        //$yaml->addJob();
-        //$yaml->setRunsOn(["ubuntu-latest"]);
-        $yaml->addMysqlService();
-        $yaml->addMatrixOsUbuntuLatest();
+        $yaml->setName("new name for workflow")
+            ->setOnPushDefaultBranches()
+            ->addMysqlService()
+            ->addMatrixOsUbuntuLatest()
+            ->addSteps(
+                [
+                    StepObject::make()->usesCheckout(),
+                    StepObject::make()->runs("php version", "php -v")
+                ]
+            );
 
         $this->line($yaml->toString());
     }

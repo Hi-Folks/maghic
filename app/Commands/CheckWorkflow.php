@@ -62,6 +62,14 @@ class CheckWorkflow extends Command
         $this->line("Workflow name: " . $yaml->getName());
         $this->line("PUSH Branches: " . $yaml->getOnPushBranchesString());
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
+        foreach ($yaml->getSteps() as $key => $step) {
+            $this->line($key);
+            if (is_string($step)) {
+                $this->line($step);
+            } else {
+                $this->line(print_r($step, true));
+            }
+        }
 
         if ($showYaml) {
             $this->line($yaml->toString());
