@@ -29,6 +29,15 @@ class YamlObject
         return new self();
     }
 
+    public function getYaml()
+    {
+        return $this->yaml;
+    }
+    public function getYamlInJsonFormat()
+    {
+        return json_encode($this->getYaml());
+    }
+
     public static function load($yamlFile)
     {
         $yaml = Yaml::parseFile($yamlFile, Yaml::PARSE_OBJECT);

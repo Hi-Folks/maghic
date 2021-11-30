@@ -5,6 +5,7 @@ namespace App\Commands;
 use App\Objects\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
+use Swaggest\JsonSchema\Schema;
 
 class CheckWorkflow extends Command
 {
@@ -50,6 +51,16 @@ class CheckWorkflow extends Command
         //$yaml->setRunsOn(["ubuntu-latest"]);
         $yaml->addMysqlService();
         $yaml->addMatrixOsUbuntuLatest();
+
+
+        try {
+            $json = $yaml->getYamlInJsonFormat();
+            $schema = Schema::import('https://json.schemastore.org/github-workflow');
+            $schema->in(json_decode($json));
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+            return;
+        }
         $this->line($yaml->toString());
         //file_put_contents(__DIR__ . "/../../.github/workflows/test.yaml", $yaml->toString());
     }
