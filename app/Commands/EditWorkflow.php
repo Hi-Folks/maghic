@@ -61,6 +61,10 @@ class EditWorkflow extends Command
                     "php-version" => "8.0"
                 ]
             )
+            ->addRun(
+                "Install Dependencies",
+                "composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist"
+            )
             ->addRun("Execute Code Sniffer via phpcs", "vendor/bin/phpcs --standard=PSR12 app");
 
         $this->line($yaml->toString());
