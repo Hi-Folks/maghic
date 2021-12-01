@@ -2,7 +2,7 @@ name: 'new name for workflow'
 'on':
     push:
         branches:
-            - $default-branch
+            - main
 jobs:
     build:
         runs-on: '${{ matrix.os }}'
