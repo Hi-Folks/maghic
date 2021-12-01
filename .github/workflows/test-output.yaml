@@ -21,5 +21,8 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with: { php-version: '8.0' }
             -
+                name: 'Install Dependencies'
+                run: 'composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist'
+            -
                 name: 'Execute Code Sniffer via phpcs'
                 run: 'vendor/bin/phpcs --standard=PSR12 app'

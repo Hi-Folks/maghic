@@ -45,7 +45,7 @@ class EditWorkflow extends Command
         $this->line("PUSH Branches: " . $yaml->getOnPushBranchesString());
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
         $yaml->setName("new name for workflow")
-            ->setOnPushDefaultBranches()
+            ->setOnPushBranches(["main"])
             //->addMysqlService()
             ->addMatrixOsUbuntuLatest()
             ->addSteps(
@@ -67,6 +67,7 @@ class EditWorkflow extends Command
             )
             ->addRun("Execute Code Sniffer via phpcs", "vendor/bin/phpcs --standard=PSR12 app");
 
+        file_put_contents(__DIR__ . "/../../.github/workflows/test-output.yaml", $yaml->toString());
         $this->line($yaml->toString());
     }
 
