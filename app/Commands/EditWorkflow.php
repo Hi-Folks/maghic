@@ -46,14 +46,22 @@ class EditWorkflow extends Command
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
         $yaml->setName("new name for workflow")
             ->setOnPushDefaultBranches()
-            ->addMysqlService()
+            //->addMysqlService()
             ->addMatrixOsUbuntuLatest()
             ->addSteps(
                 [
                     StepObject::make()->usesCheckout(),
-                    StepObject::make()->runs("php version", "php -v")
+                    StepObject::make()->runs("php version", "php -v"),
                 ]
-            );
+            )
+            ->addUse(
+                "Install PHP versions",
+                "shivammathur/setup-php@v2",
+                [
+                    "php-version" => "8.0"
+                ]
+            )
+            ->addRun("Execute Code Sniffer via phpcs", "vendor/bin/phpcs --standard=PSR12 app");
 
         $this->line($yaml->toString());
     }

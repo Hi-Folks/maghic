@@ -1,0 +1,25 @@
+name: 'new name for workflow'
+'on':
+    push:
+        branches:
+            - $default-branch
+jobs:
+    build:
+        runs-on: '${{ matrix.os }}'
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v2
+            -
+                name: 'php version'
+                run: 'php -v'
+            -
+                name: 'Install PHP versions'
+                uses: shivammathur/setup-php@v2
+                with: { php-version: '8.0' }
+            -
+                name: 'Execute Code Sniffer via phpcs'
+                run: 'vendor/bin/phpcs --standard=PSR12 app'

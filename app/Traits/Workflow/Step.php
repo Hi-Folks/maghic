@@ -2,6 +2,8 @@
 
 namespace App\Traits\Workflow;
 
+use App\Objects\StepObject;
+
 trait Step
 {
     private function getYamlKeySteps(): string
@@ -30,5 +32,29 @@ trait Step
         }
 
         return $this->setSteps($steps);
+    }
+
+    public function addRun($name, $commands)
+    {
+        return $this->addSteps(
+            [
+                StepObject::make()->runs(
+                    $name,
+                    $commands
+                )
+            ]
+        );
+    }
+    public function addUse($name, $commands, $with = [])
+    {
+        return $this->addSteps(
+            [
+                StepObject::make()->uses(
+                    $name,
+                    $commands,
+                    $with
+                )
+            ]
+        );
     }
 }
