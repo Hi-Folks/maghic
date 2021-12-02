@@ -15,7 +15,9 @@ class EditWorkflow extends Command
      * @var string
      */
     protected $signature = 'yaml:edit
-    {yaml? : Yaml file}';
+    {yaml? : Yaml file}
+    {--overwrite : Overwrite}
+    ';
 
     /**
      * The description of the command.
@@ -37,6 +39,7 @@ class EditWorkflow extends Command
         } else {
             $yaml = YamlObject::load($yamlFile);
         }
+        $overwrite = $this->option('overwrite');
 
 
         $this->title("Maghic: check file");
@@ -65,9 +68,15 @@ class EditWorkflow extends Command
                 "Install Dependencies",
                 "composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist"
             )
-            ->addRun("Execute Code Sniffer via phpcs", "vendor/bin/phpcs --standard=PSR12 app");
+            ->addRun("Execute Code Sniffer via phpcs", "vendor/bin/phpcs --standard=PSR12 app")
+            ->addRun("Execute Static Code Analysis", "vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress");
+        $filename = $yamlFile;
+        if ($yaml->saveTo($filename, $overwrite)) {
+            $this->line("Saved: " . $filename);
+        } else {
+            $this->warn("NOT Saved: " . $filename);
+        }
 
-        file_put_contents(__DIR__ . "/../../.github/workflows/test-output.yaml", $yaml->toString());
         $this->line($yaml->toString());
     }
 

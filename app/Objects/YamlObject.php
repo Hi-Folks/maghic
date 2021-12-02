@@ -9,6 +9,7 @@ use App\Traits\Workflow\Step;
 use App\Traits\Workflow\Strategy;
 use App\Traits\Workflow\Trigger;
 use Illuminate\Support\Arr;
+use SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlObject
@@ -51,6 +52,21 @@ class YamlObject
     public function toString(): string
     {
         return Yaml::dump($this->yaml, 5, 4);
+    }
+
+    public function saveTo($filename, $overwrite = false): bool
+    {
+        if (! $overwrite) {
+            if (file_exists($filename)) {
+                return false;
+            }
+        }
+        $info = new SplFileInfo($filename);
+        if (is_dir($info->getPathname())) {
+            file_put_contents($filename, $this->toString());
+        }
+        return true;
+
     }
 
 
