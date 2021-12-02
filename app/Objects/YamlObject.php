@@ -66,7 +66,6 @@ class YamlObject
             file_put_contents($filename, $this->toString());
         }
         return true;
-
     }
 
 
