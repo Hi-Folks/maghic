@@ -7,8 +7,11 @@ help:           ## Show this help.
 phpstan: ## Execute phpstan
 	vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress
 
-test: ## Execute phpunit
+test: ## Execute tests
 	vendor/bin/pest
+
+testcoverage: ## Execute tests with coverage report
+	vendor/bin/pest --coverage
 
 phpcs: ## execute phpcs
 	vendor/bin/phpcs --standard=PSR12 app
