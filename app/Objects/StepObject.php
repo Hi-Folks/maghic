@@ -39,13 +39,15 @@ class StepObject
     {
         return $this->uses("Checkout", "actions/checkout@v2");
     }
-    public function runs(string $name, string $run, array $with = []): self
+    public function runs(string $name, string $run /*, array $with = []*/): self
     {
         $this->step["name"] = $name;
         $this->step["run"] = $run;
+        /*
         if (count($with) > 0) {
             $this->step["with"] = $with;
         }
+        */
         return $this;
     }
 }
