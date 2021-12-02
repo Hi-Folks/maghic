@@ -26,3 +26,6 @@ jobs:
             -
                 name: 'Execute Code Sniffer via phpcs'
                 run: 'vendor/bin/phpcs --standard=PSR12 app'
+            -
+                name: 'Execute Static Code Analysis'
+                run: 'vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress'

@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Objects\StepPhpObject;
 use App\Objects\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
@@ -52,27 +53,20 @@ class EditWorkflow extends Command
         $this->line("PR   Branches: " . $yaml->getOnPullrequestBranchesString());
         $yaml->setName("new name for workflow")
             ->setOnPushBranches(["main"])
-            //->addMysqlService()
             ->addMatrixOsUbuntuLatest()
             ->setSteps(
                 [
-                    StepObject::make()->usesCheckout(),
-                    StepObject::make()->runs("php version", "php -v"),
+                    StepPhpObject::make()->usesCheckout(),
+                    StepPhpObject::make()->version(),
+                    StepPhpObject::make()->useSetupPhp("8.0"),
+                    StepPhpObject::make()->installDependencies(),
+                    StepPhpObject::make()->executeCodeSniffer(),
+                    StepPhpObject::make()->executeStaticCodeAnalysis()
                 ]
-            )
-            ->addUse(
-                "Install PHP versions",
-                "shivammathur/setup-php@v2",
-                [
-                    "php-version" => "8.0"
-                ]
-            )
-            ->addRun(
-                "Install Dependencies",
-                "composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist"
-            )
-            ->addRun("Execute Code Sniffer via phpcs", "vendor/bin/phpcs --standard=PSR12 app");
-            //->addRun("Execute Static Code Analysis", "vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress");
+            );
+
+
+
         $filename = $yamlFile;
         if ($yaml->saveTo($filename, $overwrite)) {
             $this->line("Saved: " . $filename);
