@@ -14,12 +14,20 @@ trait Step
     {
         return $this->getYamlKey($this->getYamlKeySteps());
     }
-    public function setSteps($steps): self
+    public function setStepsYaml($steps): self
     {
 
         return $this->setYamlKey($this->getYamlKeySteps(), $steps);
     }
+    public function setSteps($newSteps): self
+    {
+        $steps = [];
+        foreach ($newSteps as $step) {
+            $steps[] = $step->getStep();
+        }
 
+        return $this->setStepsYaml($steps);
+    }
     public function addSteps($newSteps): self
     {
         $steps =  $this->getYamlKey($this->getYamlKeySteps());
@@ -31,8 +39,9 @@ trait Step
             $steps[] = $step->getStep();
         }
 
-        return $this->setSteps($steps);
+        return $this->setStepsYaml($steps);
     }
+
 
     public function addRun($name, $commands)
     {

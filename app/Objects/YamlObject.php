@@ -61,8 +61,10 @@ class YamlObject
                 return false;
             }
         }
+
         $info = new SplFileInfo($filename);
-        if (is_dir($info->getPathname())) {
+
+        if (is_dir($info->getPath())) {
             file_put_contents($filename, $this->toString());
         }
         return true;
