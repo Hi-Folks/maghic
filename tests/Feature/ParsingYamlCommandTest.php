@@ -45,7 +45,7 @@ test('Yaml Edit with file', function () {
 
 
 test('parsing yaml2', function () {
-    $y = \App\Objects\YamlObject::load(__DIR__ . "/../data/001.yaml");
+    $y = \App\Objects\Workflow\YamlObject::load(__DIR__ . "/../data/001.yaml");
     $this->expect($y->getName())->toBe("Manually triggered workflow");
 });
 

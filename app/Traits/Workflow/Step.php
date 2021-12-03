@@ -2,7 +2,7 @@
 
 namespace App\Traits\Workflow;
 
-use App\Objects\StepObject;
+use App\Objects\Workflow\StepObject;
 
 trait Step
 {

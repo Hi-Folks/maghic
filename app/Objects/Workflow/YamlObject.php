@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Objects;
+namespace App\Objects\Workflow;
 
 use App\Traits\Workflow\Head;
 use App\Traits\Workflow\Job;

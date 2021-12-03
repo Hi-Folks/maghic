@@ -2,7 +2,7 @@
 
 namespace App\Commands;
 
-use App\Objects\YamlObject;
+use App\Objects\Workflow\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\Cache;
 use LaravelZero\Framework\Commands\Command;

@@ -1,10 +1,6 @@
 <?php
 
-namespace App\Objects;
-
-use App\Traits\Workflow\Trigger;
-use Illuminate\Support\Arr;
-use Symfony\Component\Yaml\Yaml;
+namespace App\Objects\Workflow;
 
 class StepPhpObject extends StepAbstract
 {

@@ -1,7 +1,7 @@
 <?php
 
 test('Stringify a string', function () {
-    $y = \App\Objects\YamlObject::make()
+    $y = \App\Objects\Workflow\YamlObject::make()
     ->addUse(
         "Install PHP versions",
         "shivammathur/setup-php@v2",

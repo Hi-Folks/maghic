@@ -2,8 +2,6 @@
 
 namespace App\Traits\Workflow;
 
-use JetBrains\PhpStorm\Pure;
-
 trait Strategy
 {
 

@@ -1,12 +1,12 @@
 <?php
 
 test('Stringify a string', function () {
-    $y = \App\Objects\YamlObject::make();
+    $y = \App\Objects\Workflow\YamlObject::make();
     expect($y->stringify("hello"))->toBe("hello");
 });
 
 test('Yaml Object file 001', function () {
-    $y = \App\Objects\YamlObject::load(__DIR__ . "/../data/001.yaml");
+    $y = \App\Objects\Workflow\YamlObject::load(__DIR__ . "/../data/001.yaml");
     expect($y->getName())->toBe("Manually triggered workflow");
     expect($y->getOnPullrequestBranchesString())->toBe("");
     expect($y->getOnPush())->toBeNull();
@@ -18,7 +18,7 @@ test('Yaml Object file 001', function () {
     expect($y->toString())->toBeString();
 });
 test('Yaml Object file 002', function () {
-    $y = \App\Objects\YamlObject::load(__DIR__ . "/../data/002.yaml");
+    $y = \App\Objects\Workflow\YamlObject::load(__DIR__ . "/../data/002.yaml");
     expect($y->getName())->toBe("PHP Composer");
     expect($y->getOnPullRequestBranchesString())->toBe('$default-branch');
     expect($y->getOnPush())->not()->toBeNull();
@@ -29,7 +29,7 @@ test('Yaml Object file 002', function () {
     expect($y->getOnString())->toBe("push,pull_request");
 });
 test('Yaml Object NEW', function () {
-    $y = new \App\Objects\YamlObject();
+    $y = new \App\Objects\Workflow\YamlObject();
     $y->setName("My Test Name");
     expect($y->getName())->toBe("My Test Name");
 
@@ -43,7 +43,7 @@ test('Yaml Object NEW', function () {
 });
 
 test('Yaml Object NEW with on push', function () {
-    $y = new \App\Objects\YamlObject();
+    $y = new \App\Objects\Workflow\YamlObject();
     $y->setName("My Test Name");
     $y->setOnPushBranches(["main", "develop"]);
     expect($y->getName())->toBe("My Test Name");
@@ -58,7 +58,7 @@ test('Yaml Object NEW with on push', function () {
 });
 
 test('Yaml Object NEW with on push and pr', function () {
-    $y = new \App\Objects\YamlObject();
+    $y = new \App\Objects\Workflow\YamlObject();
     $y->setName("My Test Name");
     $y->setOnPushBranches(["main", "develop"]);
     $y->setOnPullrequestBranches(["main", "develop"]);
@@ -75,7 +75,7 @@ test('Yaml Object NEW with on push and pr', function () {
 
 
 test('Fluent Yaml Object NEW with on push and pr', function () {
-    $y = \App\Objects\YamlObject::make()
+    $y = \App\Objects\Workflow\YamlObject::make()
         ->setName("My Test Name")
         ->setOnPushBranches(["main", "develop"])
         ->setOnPullrequestBranches(["main", "develop"]);
@@ -90,7 +90,7 @@ test('Fluent Yaml Object NEW with on push and pr', function () {
     expect($y->getOnString())->toBe("push,pull_request");
 });
 test('Fluent Yaml Object default branches', function () {
-    $y = \App\Objects\YamlObject::make()
+    $y = \App\Objects\Workflow\YamlObject::make()
         ->setName("My Test Name")
         ->setOnPushDefaultBranches()
         ->setOnPullrequestDefaultBranches();
@@ -106,7 +106,7 @@ test('Fluent Yaml Object default branches', function () {
 });
 
 test('Fluent Yaml Object Runs On', function () {
-    $y = \App\Objects\YamlObject::make()
+    $y = \App\Objects\Workflow\YamlObject::make()
         ->setName("My Test Name")
         ->setOnPushDefaultBranches()
         ->setRunsOn(["ubuntu-latest"]);

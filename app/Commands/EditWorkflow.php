@@ -2,11 +2,10 @@
 
 namespace App\Commands;
 
-use App\Objects\StepPhpObject;
-use App\Objects\YamlObject;
+use App\Objects\Workflow\StepPhpObject;
+use App\Objects\Workflow\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
-use App\Objects\StepObject;
 
 class EditWorkflow extends Command
 {

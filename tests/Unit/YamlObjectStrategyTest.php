@@ -1,7 +1,7 @@
 <?php
 
 test('Get Matrix Os', function () {
-$y = \App\Objects\YamlObject::make()
+$y = \App\Objects\Workflow\YamlObject::make()
 ->addMatrixOsUbuntuLatest();
 expect($y->getMatrixOs())->toBe(["ubuntu-latest"]);
 $y->setMatrixOs(["ubuntu-18.04"]);
