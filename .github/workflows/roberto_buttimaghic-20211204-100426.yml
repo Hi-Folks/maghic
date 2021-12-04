@@ -19,6 +19,9 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with: { php-version: '${{ matrix.php }}' }
             -
+                name: Checkout
+                uses: actions/checkout@v2
+            -
                 name: 'php version'
                 run: 'php -v'
             -

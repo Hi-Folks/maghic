@@ -3,6 +3,7 @@
 namespace App\Traits\Workflow;
 
 use App\Objects\Workflow\StepObject;
+use App\Objects\Workflow\StepPhpObject;
 
 trait Step
 {
@@ -65,5 +66,15 @@ trait Step
                 )
             ]
         );
+    }
+
+    public function checkout(): self
+    {
+        return $this->addSteps(
+            [
+                StepPhpObject::make()->usesCheckout()
+            ]
+        );
+
     }
 }

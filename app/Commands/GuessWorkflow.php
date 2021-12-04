@@ -52,6 +52,7 @@ class GuessWorkflow extends Command
         $yaml->setName("Workflow " . date("%Y-%m-%d"));
         $yaml->setOnPushBranches(["main"]);
         $yaml->setRunsOn();
+
         if ($mysqlOption) {
             $yaml->addMysqlService();
             $report->addValueInfo("Mysql Service", "Active");
@@ -77,6 +78,7 @@ class GuessWorkflow extends Command
             $yaml->setMatrix("php", $stepPhp);
             $report->addValue("PHP versions", $stepPhp);
             // STEP VERSION
+            $yaml->checkout();
             $yaml->addSteps([
                 StepPhpObject::make()->version(),
                 StepPhpObject::make()->installDependencies()
