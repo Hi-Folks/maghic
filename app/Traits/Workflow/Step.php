@@ -75,6 +75,5 @@ trait Step
                 StepPhpObject::make()->usesCheckout()
             ]
         );
-
     }
 }
