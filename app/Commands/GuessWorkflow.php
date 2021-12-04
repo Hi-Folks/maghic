@@ -51,6 +51,7 @@ class GuessWorkflow extends Command
         $yaml = YamlObject::make();
         $yaml->setName("Workflow " . date("%Y-%m-%d"));
         $yaml->setOnPushBranches(["main"]);
+        $yaml->setRunsOn();
         if ($mysqlOption) {
             $yaml->addMysqlService();
             $report->addValueInfo("Mysql Service", "Active");

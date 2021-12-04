@@ -5,6 +5,8 @@ name: roberto-butti/maghic
             - main
 jobs:
     build:
+        runs-on:
+            - ubuntu-latest
         services:
             mysql:
                 image: 'mysql:latest'
