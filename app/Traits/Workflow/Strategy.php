@@ -5,6 +5,11 @@ namespace App\Traits\Workflow;
 trait Strategy
 {
 
+    private function getYamlKeyStrategyMatrix($key): string
+    {
+        return $this->getCurrentJobKey("strategy.matrix." . $key);
+    }
+
     private function getYamlKeyStrategyMatrixOs(): string
     {
         return $this->getCurrentJobKey("strategy.matrix.os");
@@ -12,6 +17,10 @@ trait Strategy
     public function getMatrixOs()
     {
         return $this->getYamlKey($this->getYamlKeyStrategyMatrixOs());
+    }
+    public function setMatrix(string $key, array $value = []): self
+    {
+        return $this->setYamlKey($this->getYamlKeyStrategyMatrix($key), $value);
     }
 
     public function setMatrixOs(array $operatingSystems = ['ubuntu-latest']): self

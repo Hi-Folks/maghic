@@ -21,20 +21,33 @@ class StepPhpObject extends StepAbstract
         );
     }
 
-    public function executeCodeSniffer(): parent
+    public function executeCodeSniffer($type = "squizlabs/php_codesniffer"): parent
     {
-        return $this->runs(
-            "Execute Code Sniffer via phpcs",
-            "vendor/bin/phpcs --standard=PSR12 app"
-        );
+        switch ($type) {
+            case "squizlabs/php_codesniffer":
+                return $this->runs(
+                    "Execute Code Sniffer via phpcs",
+                    "vendor/bin/phpcs --standard=PSR12 app"
+                );
+        }
+        return $this;
     }
 
-    public function executeStaticCodeAnalysis(): parent
+    public function executeStaticCodeAnalysis($type = "phpstan/phpstan"): parent
     {
-        return $this->runs(
-            "Execute Static Code Analysis",
-            "vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress"
-        );
+        switch ($type) {
+            case "phpstan/phpstan":
+                return $this->runs(
+                    "Execute Static Code Analysis",
+                    "vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress"
+                );
+        }
+        return $this;
+    }
+
+    public function useSetupPhpMatrix(): parent
+    {
+        return $this->useSetupPhp('${{ matrix.php }}');
     }
 
     public function useSetupPhp($version = "8.0"): parent

@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^8.0",
+        "composer/semver": "^3.2",
         "laminas/laminas-text": "^2.8",
         "laravel-zero/framework": "^8.8",
         "swaggest/json-schema": "^0.12.39",
