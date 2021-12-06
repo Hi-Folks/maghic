@@ -11,5 +11,4 @@ test('Stringify a string', function () {
     );
     expect($y->getSteps())->toBeArray();
     expect($y->getSteps())->toHaveCount(1);
-
 });

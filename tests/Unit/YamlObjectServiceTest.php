@@ -14,7 +14,6 @@ test('GetSet Service Image', function () {
 test('GetFirst job name', function () {
     $y = \App\Objects\Workflow\YamlObject::make();
     expect($y->getFirstJobName())->toBe("build");
-
 });
 
 test('Add Mysql service', function () {
@@ -23,6 +22,4 @@ test('Add Mysql service', function () {
         ->setOnPushDefaultBranches()
         ->addMysqlService();
     expect($y->getImage())->toBe("mysql:latest");
-
 });
-

@@ -68,4 +68,3 @@ test('Yaml Edit with no cache', function () {
         //->expectsQuestion('Which event?', 'pull_request')
         ->assertExitCode(0);
 });
-

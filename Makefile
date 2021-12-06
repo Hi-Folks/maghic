@@ -14,9 +14,9 @@ testcoverage: ## Execute tests with coverage report
 	vendor/bin/pest --coverage
 
 phpcs: ## execute phpcs
-	vendor/bin/phpcs --standard=PSR12 app
+	vendor/bin/phpcs
 
 phpfix: ## Fix some warnings from phpcs
-	vendor/bin/phpcbf --standard=PSR12  app
+	vendor/bin/phpcbf
 
 allcheck: phpcs phpstan test ## it performs all check (phpcs, phpstan, tests)
