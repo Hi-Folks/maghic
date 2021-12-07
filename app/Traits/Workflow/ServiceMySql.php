@@ -2,6 +2,8 @@
 
 namespace App\Traits\Workflow;
 
+use Illuminate\Support\Arr;
+
 trait ServiceMySql
 {
     public function getImage()
@@ -22,27 +24,17 @@ trait ServiceMySql
     public function addMysqlService(
         string $image = "mysql:latest"
     ): self {
-        $jobKey = $this->getCurrentJobKey("services.mysql");
-        $this->setYamlKey(
-            $jobKey . ".image",
-            $image
-        );
-        $this->setYamlKey(
-            $jobKey . ".env",
-            [
-                'MYSQL_ALLOW_EMPTY_PASSWORD' => 'yes',
-                'MYSQL_DATABASE' => 'db_test_laravel',
-            ]
-        );
-        $this->setYamlKey(
-            $jobKey . ".ports",
-            ['33306:3306']
-        );
-        $this->setYamlKey(
-            $jobKey . ".options",
-            '--health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3'
-        );
-
+        $this->setYamlKey("env.MYSQL_IMAGE", $image);
+        $this->addServiceFromTemplate("mysql");
+        $this->setImage($image);
         return $this;
+    }
+
+    public function addServiceFromTemplate($name): self
+    {
+        $jobKeyServices = $this->getCurrentJobKey("services");
+        $services =  $this->getYamlKey($jobKeyServices);
+        $services[$name] = Arr::get($this->templateYaml, "services." . $name);
+        return $this->setYamlKey($jobKeyServices, $services);
     }
 }

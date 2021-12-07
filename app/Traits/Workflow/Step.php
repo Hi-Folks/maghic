@@ -4,6 +4,7 @@ namespace App\Traits\Workflow;
 
 use App\Objects\Workflow\StepObject;
 use App\Objects\Workflow\StepPhpObject;
+use Illuminate\Support\Arr;
 
 trait Step
 {
@@ -40,6 +41,21 @@ trait Step
             $steps[] = $step->getStep();
         }
 
+        return $this->setStepsYaml($steps);
+    }
+
+    public function addStepFromTemplates($array): self
+    {
+        foreach ($array as $name) {
+            $this->addStepFromTemplate($name);
+        }
+        return $this;
+    }
+    public function addStepFromTemplate($name): self
+    {
+        $steps =  $this->getYamlKey($this->getYamlKeySteps());
+        //dd(Arr::get($this->templateYaml, "steps." . $name));
+        $steps[] = Arr::get($this->templateYaml, "steps." . $name);
         return $this->setStepsYaml($steps);
     }
 

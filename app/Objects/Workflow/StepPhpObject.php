@@ -41,7 +41,17 @@ class StepPhpObject extends StepAbstract
         }
         return $this;
     }
-
+    public function executeTests($type = "phpunit/phpunit"): parent
+    {
+        switch ($type) {
+            case "phpunit/phpunit":
+                return $this->runs(
+                    "Execute tests (Unit and Feature tests) via PHPUnit",
+                    "vendor/bin/phpunit --testdox"
+                );
+        }
+        return $this;
+    }
     public function useSetupPhpMatrix(): parent
     {
         return $this->useSetupPhp('${{ matrix.php }}');

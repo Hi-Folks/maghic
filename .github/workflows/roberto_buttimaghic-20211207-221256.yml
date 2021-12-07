@@ -5,8 +5,11 @@ name: roberto-butti/maghic
             - main
 jobs:
     build:
-        runs-on:
-            - ubuntu-latest
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+                php-versions: ['8.0', '8.1']
+        runs-on: '${{ matrix.os }}'
         services:
             mysql:
                 image: 'mysql:latest'
@@ -15,14 +18,14 @@ jobs:
                 options: '--health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3'
         steps:
             -
-                name: 'Install PHP versions'
-                uses: shivammathur/setup-php@v2
-                with: { php-version: '${{ matrix.php }}' }
-            -
-                name: Checkout
+                name: 'Checkout code'
                 uses: actions/checkout@v2
             -
-                name: 'php version'
+                name: 'Install PHP versions'
+                uses: shivammathur/setup-php@v2
+                with: { php-version: '${{ matrix.php-versions }}' }
+            -
+                name: 'Show PHP version'
                 run: 'php -v'
             -
                 name: 'Install Dependencies'
@@ -33,6 +36,9 @@ jobs:
             -
                 name: 'Execute Static Code Analysis'
                 run: 'vendor/bin/phpstan analyse -c ./phpstan.neon --no-progress'
-        strategy:
-            matrix:
-                php: ['8.0', '8.1']
+            -
+                name: 'Execute tests (Unit and Feature tests) via Pest'
+                env: { DB_CONNECTION: mysql, DB_DATABASE: db_test_laravel, DB_PORT: 33306, DB_USER: root }
+                run: vendor/bin/pest
+env:
+    MYSQL_IMAGE: 'mysql:latest'

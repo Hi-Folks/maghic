@@ -52,7 +52,7 @@ trait Job
 
     public function setRunsOn(array $operatingSystems = ['ubuntu-latest']): self
     {
-        return $this->setYamlKey($this->getCurrentJobKey("runs-on"), $operatingSystems);
+        return $this->setYamlKey($this->getCurrentJobKey("runs-on"), implode(",", $operatingSystems));
     }
     public function setRunsOnMatrix(): self
     {
@@ -60,7 +60,11 @@ trait Job
     }
     public function getRunsOn(): array
     {
-        return $this->getYamlKey($this->getCurrentJobKey("runs-on"));
+        $runsOn = $this->getYamlKey($this->getCurrentJobKey("runs-on"));
+        if (is_string($runsOn)) {
+            $runsOn = [ $runsOn ];
+        }
+        return $runsOn;
     }
     public function getRunsOnString(): string
     {

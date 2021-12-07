@@ -9,6 +9,7 @@ use App\Objects\Workflow\YamlObject;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Arr;
 use LaravelZero\Framework\Commands\Command;
+use Symfony\Component\Yaml\Yaml;
 
 class GuessWorkflow extends Command
 {
@@ -46,12 +47,19 @@ class GuessWorkflow extends Command
         $yamlFile = GuesserFiles::generateYamlFilename("", "");
 
 
+
+
         $report = new ReportExecution();
+
 
         $yaml = YamlObject::make();
         $yaml->setName("Workflow " . date("%Y-%m-%d"));
         $yaml->setOnPushBranches(["main"]);
-        $yaml->setRunsOn();
+        $yaml->setMatrix("os", ['ubuntu-latest']);
+        $yaml->setRunsOnMatrix();
+
+
+
 
         if ($mysqlOption) {
             $yaml->addMysqlService();
@@ -71,50 +79,30 @@ class GuessWorkflow extends Command
             );
             // MATRIX
             $phpversion = Arr::get($composer, 'require.php', "8.0");
-            $yaml->addSteps([
-                StepPhpObject::make()->useSetupPhpMatrix()
-            ]);
             $stepPhp = $guesserFiles->detectPhpVersion($phpversion);
-            $yaml->setMatrix("php", $stepPhp);
+            $yaml->setMatrix("php-versions", $stepPhp);
             $report->addValue("PHP versions", $stepPhp);
             // STEP VERSION
-            $yaml->checkout();
-            $yaml->addSteps([
-                StepPhpObject::make()->version(),
-                StepPhpObject::make()->installDependencies()
+            $yaml->addStepFromTemplates([
+                "checkout", "use-php", "php-version", "composer-install-dependencies"
             ]);
             $report->addValueInfo("Install dependencies", 'I will');
             $devPackages = Arr::get($composer, 'require-dev');
             // Code Sniffer Tool
             // squizlabs/php_codesniffer
-            $arrayCst = ["squizlabs/php_codesniffer"];
-            $hasCst = false;
-            foreach ($arrayCst as $cst) {
-                if (key_exists($cst, $devPackages)) {
-                    $yaml->addSteps([
-                        StepPhpObject::make()->executeCodeSniffer($cst)
-                    ]);
-                    $report->addValueInfo("Code Sniffer execution", $cst);
-                    $hasCst = true;
+
+            $codeQualityList = [
+              "squizlabs/php_codesniffer" => "execute-phpcs",
+                "phpstan/phpstan" => "execute-phpstan",
+                "phpunit/phpunit" => "execute-phpunit",
+                "pestphp/pest" => "execute-pest"
+
+            ];
+            foreach ($codeQualityList as $cqPackage => $cqKey) {
+                if (key_exists($cqPackage, $devPackages)) {
+                    $yaml->addStepFromTemplate($cqKey);
+                    $report->addValueInfo("Code Quality", $cqPackage);
                 }
-            }
-            if (! $hasCst) {
-                $report->addValue("Code Sniffer execution", 'Skip');
-            }
-            // static code analysis
-            $arraySca = ["phpstan/phpstan"];
-            $hasSca = false;
-            foreach ($arraySca as $sca) {
-                if (key_exists($sca, $devPackages)) {
-                    $yaml->addSteps([
-                        StepPhpObject::make()->executeStaticCodeAnalysis($sca)
-                    ]);
-                    $report->addValueInfo("Static Code execution", $sca);
-                    $hasSca = true;
-                }
-            }
-            if (! $hasSca) {
-                $report->addValue("Static Code execution", 'Skip');
             }
         } else {
             $report[] = ["Composer File" , "not Found"];

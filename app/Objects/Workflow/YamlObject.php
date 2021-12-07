@@ -21,10 +21,13 @@ class YamlObject
     use Strategy;
     use Step;
 
+    protected array $templateYaml = [];
+
     public function __construct(
         private mixed $yaml = []
     ) {
         $this->setCurrentJobName("build");
+        $this->loadFromTemplate();
     }
 
     public static function make(): self
@@ -47,6 +50,11 @@ class YamlObject
         $yamlObject = new self($yaml);
         $yamlObject->setCurrentJobName($yamlObject->getFirstJobName());
         return $yamlObject;
+    }
+
+    public function loadFromTemplate()
+    {
+        $this->templateYaml = Yaml::parseFile(app()->configPath("template-steps.yaml"));
     }
 
     public function toString(): string
