@@ -1,4 +1,4 @@
-name: roberto-butti/maghic
+name: hi-folks/maghic
 'on':
     push:
         branches:

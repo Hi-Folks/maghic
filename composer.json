@@ -1,13 +1,13 @@
 {
-    "name": "roberto-butti/maghic",
-    "description": "Maghic: MAnaging GitHub .",
+    "name": "hi-folks/maghic",
+    "description": "Maghic: automatically generates your GitHub Actions Workflow.",
     "keywords": ["github actions", "console", "cli"],
     "homepage": "https://hi-folks.dev",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/roberto-butti/maghic/issues",
-        "source": "https://github.com/roberto-butti/maghic"
+        "issues": "https://github.com/Hi-Folks/maghic/issues",
+        "source": "https://github.com/Hi-Folks/maghic"
     },
     "authors": [
         {
