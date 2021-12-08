@@ -214,4 +214,21 @@ class GuesserFiles
         }
         return $stepPhp;
     }
+
+    public function readNvmrc(string $fileNvmrc): string
+    {
+        if (!is_readable($fileNvmrc)) {
+            return "";
+        }
+
+        $lines = file($fileNvmrc, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (str_starts_with(trim($line), '#')) {
+                continue;
+            }
+            return $line;
+        }
+
+        return "";
+    }
 }

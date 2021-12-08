@@ -44,13 +44,8 @@ class GuessWorkflow extends Command
         $mysqlOption = $this->option("mysql");
         $showOption = $this->option("show");
         $saveOption = $this->option("save");
-        $yamlFile = GuesserFiles::generateYamlFilename("", "");
-
-
-
 
         $report = new ReportExecution();
-
 
         $yaml = YamlObject::make();
         $yaml->setName("Workflow " . date("%Y-%m-%d"));
@@ -59,12 +54,11 @@ class GuessWorkflow extends Command
         $yaml->setRunsOnMatrix();
 
 
-
-
         if ($mysqlOption) {
             $yaml->addMysqlService();
             $report->addValueInfo("Mysql Service", "Active");
         }
+        $yaml->addStepFromTemplate("checkout");
 
         $guesserFiles->pathFiles($projectDir);
         if ($guesserFiles->composerExists()) {
@@ -73,10 +67,6 @@ class GuessWorkflow extends Command
             $yaml->setName(Arr::get($composer, 'name', "Workflow"));
             $report->addValue("Project Name", $yaml->getName());
 
-            $yamlFile = GuesserFiles::generateYamlFilename(
-                GuesserFiles::getGithubWorkflowDirectory($projectDir),
-                $yaml->getName()
-            );
             // MATRIX
             $phpversion = Arr::get($composer, 'require.php', "8.0");
             $stepPhp = $guesserFiles->detectPhpVersion($phpversion);
@@ -84,15 +74,13 @@ class GuessWorkflow extends Command
             $report->addValue("PHP versions", $stepPhp);
             // STEP VERSION
             $yaml->addStepFromTemplates([
-                "checkout", "use-php", "php-version", "composer-install-dependencies"
+                "use-php", "php-version", "install-dependencies-composer"
             ]);
-            $report->addValueInfo("Install dependencies", 'I will');
+            $report->addValueInfo("Install dependencies", 'Composer/PHP');
             $devPackages = Arr::get($composer, 'require-dev');
             // Code Sniffer Tool
-            // squizlabs/php_codesniffer
-
             $codeQualityList = [
-              "squizlabs/php_codesniffer" => "execute-phpcs",
+                "squizlabs/php_codesniffer" => "execute-phpcs",
                 "phpstan/phpstan" => "execute-phpstan",
                 "phpunit/phpunit" => "execute-phpunit",
                 "pestphp/pest" => "execute-pest"
@@ -107,6 +95,24 @@ class GuessWorkflow extends Command
         } else {
             $report[] = ["Composer File" , "not Found"];
         }
+        if ($guesserFiles->packageExists()) {
+            $versionFromNvmrc = $guesserFiles->readNvmrc($guesserFiles
+                ->getNvmrcPath());
+            if ($versionFromNvmrc === "") {
+                $versionFromNvmrc = "16.x";
+            }
+            $yaml->setMatrix("node-versions", [$versionFromNvmrc]);
+            $report->addValue("Nodejs versions", $versionFromNvmrc);
+
+            $yaml->addStepFromTemplates([
+                "use-node", "node-version", "install-dependencies-npm", "execute-npm-test"
+            ]);
+            $report->addValueInfo("Install dependencies", 'Npm/Nodejs');
+            $report->addValueInfo("Install dependencies", 'Npm/Nodejs');
+            $report->addValueInfo("Code Quality", 'npm run test');
+        }
+
+
         $yamlFile = GuesserFiles::generateYamlFilename(
             GuesserFiles::getGithubWorkflowDirectory($projectDir),
             $yaml->getName()

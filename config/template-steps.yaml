@@ -23,12 +23,25 @@ steps:
         uses: shivammathur/setup-php@v2
         with:
             php-version: ${{ matrix.php-versions }}
+    use-node:
+        name: Setup Nodejs
+        uses: actions/setup-node@v1
+        with:
+            node-version: ${{ matrix.node-versions }}
     php-version:
         name: 'Show PHP version'
         run: 'php -v'
-    composer-install-dependencies:
-        name: 'Install Dependencies'
+    node-version:
+        name: 'Show Nodejs version'
+        run: 'node -v'
+
+    install-dependencies-composer:
+        name: 'Install Composer Dependencies'
         run: 'composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist'
+    install-dependencies-npm:
+        name: 'Install Npm Dependencies'
+        run: 'npm ci'
+
     execute-phpcs:
         name: 'Execute Code Sniffer via phpcs'
         run: 'vendor/bin/phpcs --standard=PSR12 app'
@@ -51,3 +64,9 @@ steps:
             DB_PORT: 33306
             DB_USER: root
         run: vendor/bin/pest
+
+    execute-npm-test:
+        name: Execute tests
+        run: |
+            npm run build --if-present
+            npm test --if-present
