@@ -49,6 +49,7 @@ class EditWorkflow extends Command
         $dryRun = $this->option('dry-run');
 
 
+
         $this->title("Maghic: check file");
         $this->line("Current Directory" . getcwd());
         $this->line("Workflow name: " . $yaml->getName());

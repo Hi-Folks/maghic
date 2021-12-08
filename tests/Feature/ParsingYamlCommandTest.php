@@ -57,7 +57,7 @@ test('Yaml Edit with file', function () {
 });
 test('Yaml Edit with no file', function () {
     Storage::fake('local');
-    $this->artisan('yaml:edit', ["--saveto" => "maghic-test.yml"])
+    $this->artisan('yaml:edit', ["--dry-run" => 1, "--saveto" => "maghic1-test.yml"])
         //->expectsQuestion('What is the Workflow name?', 'My Test Workflow')
         //->expectsQuestion('Which event?', 'pull_request')
         ->assertExitCode(0);
@@ -66,7 +66,7 @@ test('Yaml Edit with no cache', function () {
     \Illuminate\Support\Facades\Cache::forget('cache-schema-yaml');
     Storage::fake('local');
 
-    $this->artisan('yaml:edit', ["--saveto" => "maghic-test.yml"])
+    $this->artisan('yaml:edit', ["--dry-run" => 1,"--saveto" => "maghic2-test.yml"])
         //->expectsQuestion('What is the Workflow name?', 'My Test Workflow')
         //->expectsQuestion('Which event?', 'pull_request')
         ->assertExitCode(0);

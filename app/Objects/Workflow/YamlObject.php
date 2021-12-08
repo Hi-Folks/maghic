@@ -72,6 +72,9 @@ class YamlObject
 
         $info = new SplFileInfo($filename);
         $path = $info->getPath();
+        if ($dryRun) {
+            return false;
+        }
         if (is_dir($path) or ($path === "")) {
             File::put($filename, $this->toString());
             return true;
