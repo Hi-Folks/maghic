@@ -9,6 +9,8 @@ use App\Traits\Workflow\Step;
 use App\Traits\Workflow\Strategy;
 use App\Traits\Workflow\Trigger;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use SplFileInfo;
 use Symfony\Component\Yaml\Yaml;
 
@@ -62,20 +64,19 @@ class YamlObject
         return Yaml::dump($this->yaml, 5, 4);
     }
 
-    public function saveTo($filename, $overwrite = false): bool
+    public function saveTo($filename, $overwrite = false, $dryRun = false): bool
     {
-        if (! $overwrite) {
-            if (file_exists($filename)) {
-                return false;
-            }
+        if (! $overwrite and  file_exists($filename)) {
+            return false;
         }
 
         $info = new SplFileInfo($filename);
-
-        if (is_dir($info->getPath())) {
-            file_put_contents($filename, $this->toString());
+        $path = $info->getPath();
+        if (is_dir($path) or ($path === "")) {
+            File::put($filename, $this->toString());
+            return true;
         }
-        return true;
+        return false;
     }
 
 

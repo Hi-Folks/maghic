@@ -18,6 +18,8 @@ class EditWorkflow extends Command
     {yaml? : Yaml file}
     {--overwrite : Overwrite}
     {--show : Show the generated Yaml Workflow file}
+    {--saveto= : Where the Yaml is saved }
+    {--dry-run : Do not save YAML file }
     ';
 
     /**
@@ -43,6 +45,8 @@ class EditWorkflow extends Command
         }
         $overwrite = $this->option('overwrite');
         $showYaml = $this->option('show');
+        $saveTo = $this->option('saveto');
+        $dryRun = $this->option('dry-run');
 
 
         $this->title("Maghic: check file");
@@ -66,11 +70,14 @@ class EditWorkflow extends Command
 
 
 
-        $filename = $yamlFile;
-        if ($yaml->saveTo($filename, $overwrite)) {
+        $filename = (is_null($saveTo)) ? $yamlFile : $saveTo;
+        if ($yaml->saveTo($filename, $overwrite, $dryRun)) {
             $this->line("Saved: " . $filename);
         } else {
             $this->warn("NOT Saved: " . $filename);
+        }
+        if ($dryRun) {
+            $this->warn("The command was executed with --dry-run mode");
         }
         if ($showYaml) {
             $this->line($yaml->toString());

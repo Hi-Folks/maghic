@@ -56,14 +56,17 @@ test('Yaml Edit with file', function () {
         ->assertExitCode(0);
 });
 test('Yaml Edit with no file', function () {
-    $this->artisan('yaml:edit')
+    Storage::fake('local');
+    $this->artisan('yaml:edit', ["--saveto" => "maghic-test.yml"])
         //->expectsQuestion('What is the Workflow name?', 'My Test Workflow')
         //->expectsQuestion('Which event?', 'pull_request')
         ->assertExitCode(0);
 });
 test('Yaml Edit with no cache', function () {
     \Illuminate\Support\Facades\Cache::forget('cache-schema-yaml');
-    $this->artisan('yaml:edit')
+    Storage::fake('local');
+
+    $this->artisan('yaml:edit', ["--saveto" => "maghic-test.yml"])
         //->expectsQuestion('What is the Workflow name?', 'My Test Workflow')
         //->expectsQuestion('Which event?', 'pull_request')
         ->assertExitCode(0);
