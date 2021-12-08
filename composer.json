@@ -1,5 +1,6 @@
 {
     "name": "hi-folks/maghic",
+    "version": "0.1.0",
     "description": "Maghic: automatically generates your GitHub Actions Workflow.",
     "keywords": ["github actions", "console", "cli"],
     "homepage": "https://hi-folks.dev",
